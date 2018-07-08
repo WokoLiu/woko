@@ -12,6 +12,7 @@ import commands
 import os
 import re
 import sys
+import fnmatch
 
 
 def check_line(pattern, file_name):
@@ -28,7 +29,8 @@ def check_line(pattern, file_name):
 def tree_file(base_path):
     for file_path, dir_list, file_list in os.walk(base_path):
         for file_name in file_list:
-            if os.path.splitext(file_name)[1] == '.py':
+            # if os.path.splitext(file_name)[1] == '.py':
+            if fnmatch.fnmatch(file_name, '*.py'):
                 yield os.path.join(file_path, file_name)
 
 
