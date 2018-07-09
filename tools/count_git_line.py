@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/7/6 18:43
 # @Author  : Woko
-# @File    : check_git_line.py
+# @File    : count_git_line.py
 
 """检查一个git项目中，每个人的代码量及占比
 须在对应git环境下执行
