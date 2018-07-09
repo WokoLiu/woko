@@ -49,8 +49,8 @@ def count_everyone(file_name):
     for line in file_data.split('\n'):
         if line:
             all_count += 1
-            res = line.split(' ', 2)
-            everyone_lines[res[1]] += 1
+            user = line[line.index('(')+1:].split(' ', 1)[0]
+            everyone_lines[user] += 1
     return all_count
 
 
@@ -70,12 +70,12 @@ def run_all(base_path):
     for file_path in tree_file(base_path):
         all_count += count_everyone(file_path)
     print '总代码量：', all_count
-    if everyone_lines['(Not']:
-        not_commit = everyone_lines['(Not']
-        del everyone_lines['(Not']
+    if everyone_lines['Not']:
+        not_commit = everyone_lines['Not']
+        del everyone_lines['Not']
         print '未提交：', not_commit
     for user, count in everyone_lines.iteritems():
-        print user[1:], ': ', count, (float(count)/all_count*100)
+        print user, ': ', count, (float(count)/all_count*100)
 
 if __name__ == '__main__':
     base_path = '.'
