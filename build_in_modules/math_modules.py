@@ -4,7 +4,11 @@
 # @File    : math_modules.py
 
 """内置的math类，包含一些数学方法，全都是functions，基本都返回float
-参见文档：https://blog.csdn.net/u011225629/article/details/78458724
+注：math是cmath的子集，math只提供对实数的操作，返回大多为float
+    而cmath提供对复数的操作，返回大多为实部虚部均为float的复数
+
+这里只写math，不写cmath
+math参见文档：https://blog.csdn.net/u011225629/article/details/78458724
 
 自然对数e
 圆周率pi
