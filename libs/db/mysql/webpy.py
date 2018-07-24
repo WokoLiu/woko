@@ -3,6 +3,17 @@
 # @Author  : Woko
 # @File    : webpy.py
 
+"""使用 web.py 操作mysql数据库
+当前只提供了一些简单操作，对应数据库表也非常简单
+
+CREATE TABLE `test` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `value` varchar(32) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+"""
+
 import web
 
 
@@ -24,9 +35,6 @@ print res[0] if res else 'select false'
 
 res = db.where('test', id=1)
 print res[0] if res else 'where false'
-
-# res = db.sql_clauses(what='*', tables='test', where='id = 1', group='id', order='id asc', limit=1, offset=0)
-# print res
 
 # res = db.insert('test', value='yoyoyo')
 # print res
