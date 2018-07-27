@@ -45,7 +45,7 @@ class MemoryListBitMap(BitMap):
         self.map = [0] * self.cap  # 1, 0, True, False，所占空间都是24byte
 
     def get_bit(self, value):
-        if not value:
+        if not 0 <= value < self.cap:
             return 0
         if self.map[value]:
             return 1
@@ -54,6 +54,29 @@ class MemoryListBitMap(BitMap):
 
     def set_bit(self, value):
         self.map[value] = 1
+
+
+class MemoryStringBitMap(BitMap):
+    """在内存里，使用string来存储
+    会占据大量内存（但比list少一个数量级）
+    缺点是set_bit操作非常麻烦
+    """
+    def __init__(self, bit_size):
+        super(MemoryStringBitMap, self).__init__(bit_size)
+        self.map = '0' * self.cap
+
+    def get_bit(self, value):
+        if not 0 <= value < self.cap:
+            return 0
+        if self.map[value] == '1':
+            return 1
+        else:
+            return 0
+
+    def set_bit(self, value):
+        if not 0 <= value < self.cap:
+            return None
+        self.map = self.map[:value] + '1' + self.map[value+1:]
 
 
 class BloomFilter(object):
@@ -106,7 +129,7 @@ def test_one(bf, test_key):
 def run():
     bit_size = 8
     test_key = 'https://github.com/WokoLiu'
-    bit_map = MemoryListBitMap(bit_size)
+    bit_map = MemoryStringBitMap(bit_size)
     func_list = build_hash_func_list(bit_size)
     bf = BloomFilter(bit_map, func_list)
 
