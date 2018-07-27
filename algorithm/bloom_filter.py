@@ -10,6 +10,7 @@
 python实现及redis.bitmap大小的选择：https://blog.csdn.net/Bone_ACE/article/details/53107018
 """
 
+import redis
 from hashlib import md5
 from build_hash import BitHash
 
@@ -98,6 +99,22 @@ class MemoryIntBitMap(BitMap):
         self.map |= (1 << (value-1))
 
 
+class RedisBitMap(BitMap):
+    """使用redis自带的bitmap
+    超级快！
+    """
+    def __init__(self, bit_size, host='localhost', port=6379, db=0,
+                 password=None, key='bloomfilter'):
+        super(RedisBitMap, self).__init__(bit_size, key=key)
+        self.redis = redis.StrictRedis(host=host, port=port, db=db, password=password)
+
+    def get_bit(self, value):
+        return self.redis.getbit(self.key, value)
+
+    def set_bit(self, value):
+        self.redis.setbit(self.key, value, 1)
+
+
 class BloomFilter(object):
     """布隆过滤器本体"""
     def __init__(self, bit_map, hash_func):
@@ -166,7 +183,7 @@ def cal_space():
 def run():
     bit_size = 8
     test_key = 'https://github.com/WokoLiu'
-    bit_map = MemoryIntBitMap(bit_size)
+    bit_map = RedisBitMap(bit_size)
     func_list = build_hash_func_list(bit_size)
     bf = BloomFilter(bit_map, func_list)
 
