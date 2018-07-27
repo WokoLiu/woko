@@ -6,8 +6,13 @@
 """布隆过滤器，用于检测一个值是否在一个集合里
 整体分三部分：1. 过滤器本体，2. 存储集合的工具，3. 一组哈希函数
 参考文档：
+简单介绍：http://www.10tiao.com/html/248/201805/2449231537/1.html
 公式指导：https://blog.csdn.net/qq_18495465/article/details/78500472
 python实现及redis.bitmap大小的选择：https://blog.csdn.net/Bone_ACE/article/details/53107018
+
+TODO：
+1. Memory的几个方式，增加lazy方式get/set
+2. 考虑BitMap类里默认参数是否需要
 """
 
 import redis
@@ -102,8 +107,8 @@ class MemoryIntBitMap(BitMap):
         if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
             return 0
         return 1 if self.map_list[map_id] & (1 << (value-1)) else 0  # 直接判断这一位是不是有值
-        # return (self.map >> (value-1)) & 1  # 先右移，再与最末位与
-        # return (self.map >> (value-1)) % 2  # 先右移，再判奇偶
+        # return (self.map_list[map_id] >> (value-1)) & 1  # 先右移，再与最末位与
+        # return (self.map_list[map_id] >> (value-1)) % 2  # 先右移，再判奇偶
 
     def set_bit(self, value, map_id=0):
         """直接按位或"""
@@ -122,14 +127,11 @@ class RedisBitMap(BitMap):
         self.redis = redis.StrictRedis(host=host, port=port, db=db, password=password)
 
     def get_bit(self, value, map_id=0):
-        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
-            return 0
+        """这里不需要对value和map_id做校验，redis会自动处理"""
         key = self.key + str(map_id)
         return self.redis.getbit(key, value)
 
     def set_bit(self, value, map_id=0):
-        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
-            return None
         key = self.key + str(map_id)
         self.redis.setbit(key, value, 1)
 
@@ -161,7 +163,6 @@ class BloomFilter(object):
     def insert(self, value):
         """将这个值插入集合"""
         value = md5(value).hexdigest()
-        # print value[:2], int(value[:2], 16), self.map_num
         map_id = int(value[:2], 16) % self.map_num
 
         for f in self.hash_func:
