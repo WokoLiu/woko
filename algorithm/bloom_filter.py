@@ -17,23 +17,31 @@ from build_hash import BitHash
 
 class BitMap(object):
     """布隆过滤器使用的存储集合"""
-    def __init__(self, bit_size, **kwargs):
+    def __init__(self, bit_size, map_num=1, **kwargs):
         """
         :param bit_size: 总比特位数
+        :param cap: bit map 总大小
+        :param map_num: 集合个数
         """
         self.bit = bit_size
-        self.cap = 1 << bit_size  # bit map 总大小
+        self.cap = 1 << bit_size
+        self.map_num = map_num
         self.__conf = kwargs
 
     def __getattr__(self, item):
         return self.__conf[item]
 
-    def get_bit(self, value):
-        """获取比特位的值"""
+    def get_bit(self, value, map_id=0):
+        """
+        获取某比特位的值，支持同时存在多个map，但去第几个map里找需要外部指定
+        :param value: 第几位
+        :param map_id: 第几个map
+        :return:
+        """
         raise NotImplementedError
 
-    def set_bit(self, value):
-        """设置比特位的值"""
+    def set_bit(self, value, map_id=0):
+        """设置某比特位的值"""
         raise NotImplementedError
 
 
@@ -41,17 +49,22 @@ class MemoryListBitMap(BitMap):
     """在内存里，使用list来存储
     会占据超大量内存，无法处理超大量的数据（放在这里只是展示一下功能，实际上肯定不会使用这个）
     """
-    def __init__(self, bit_size):
-        super(MemoryListBitMap, self).__init__(bit_size)
-        self.map = [0] * self.cap  # 1, 0, True, False，所占空间都是24byte
+    def __init__(self, bit_size, map_num=1):
+        super(MemoryListBitMap, self).__init__(bit_size, map_num)
+        self.map_list = []
+        for i in range(map_num):
+            self.map_list.append([0] * self.cap)  # 1, 0, True, False，所占空间都是24byte
 
-    def get_bit(self, value):
-        if not 0 <= value < self.cap:
+    def get_bit(self, value, map_id=0):
+        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
             return 0
-        return 1 if self.map[value] else 0
+        return 1 if self.map_list[map_id][value] else 0
 
-    def set_bit(self, value):
-        self.map[value] = 1
+    def set_bit(self, value, map_id=0):
+        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
+            return None
+        self.map_list[map_id][value] = 1
+        print self.map_list
 
 
 class MemoryStringBitMap(BitMap):
@@ -59,19 +72,19 @@ class MemoryStringBitMap(BitMap):
     会占据大量内存（大概是list的1/8）
     缺点是set_bit操作非常麻烦
     """
-    def __init__(self, bit_size):
-        super(MemoryStringBitMap, self).__init__(bit_size)
-        self.map = '0' * self.cap
+    def __init__(self, bit_size, map_num=1):
+        super(MemoryStringBitMap, self).__init__(bit_size, map_num)
+        self.map_list = ['0' * self.cap] * map_num
 
-    def get_bit(self, value):
-        if not 0 <= value < self.cap:
+    def get_bit(self, value, map_id=0):
+        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
             return 0
-        return 1 if self.map[value] == '1' else 0
+        return 1 if self.map_list[map_id][value] == '1' else 0
 
-    def set_bit(self, value):
-        if not 0 <= value < self.cap:
+    def set_bit(self, value, map_id=0):
+        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
             return None
-        self.map = self.map[:value] + '1' + self.map[value+1:]
+        self.map_list[map_id] = self.map_list[map_id][:value] + '1' + self.map_list[map_id][value+1:]
 
 
 class MemoryIntBitMap(BitMap):
@@ -80,68 +93,80 @@ class MemoryIntBitMap(BitMap):
     速度也要快很多，但超大数量下还是会慢
     还不清楚是位移慢还是与或慢
     """
-    def __init__(self, bit_size):
-        super(MemoryIntBitMap, self).__init__(bit_size)
-        self.map = 1 << self.cap  # 是self.cap个二进制位的一个数
+    def __init__(self, bit_size, map_num=1):
+        super(MemoryIntBitMap, self).__init__(bit_size, map_num)
+        self.map_list = [1 << self.cap] * map_num  # 是self.cap个二进制位的一个数
 
-    def get_bit(self, value):
+    def get_bit(self, value, map_id=0):
         """想到了三种方式，从上到下效率依次降低"""
-        if not 0 <= value < self.cap:
+        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
             return 0
-        return 1 if self.map & (1 << (value-1)) else 0  # 直接判断这一位是不是有值
+        return 1 if self.map_list[map_id] & (1 << (value-1)) else 0  # 直接判断这一位是不是有值
         # return (self.map >> (value-1)) & 1  # 先右移，再与最末位与
         # return (self.map >> (value-1)) % 2  # 先右移，再判奇偶
 
-    def set_bit(self, value):
+    def set_bit(self, value, map_id=0):
         """直接按位或"""
-        if not 0 <= value < self.cap:
+        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
             return None
-        self.map |= (1 << (value-1))
+        self.map_list[map_id] |= (1 << (value-1))
 
 
 class RedisBitMap(BitMap):
     """使用redis自带的bitmap
     超级快！
     """
-    def __init__(self, bit_size, host='localhost', port=6379, db=0,
+    def __init__(self, bit_size, map_num=1, host='localhost', port=6379, db=0,
                  password=None, key='bloomfilter'):
-        super(RedisBitMap, self).__init__(bit_size, key=key)
+        super(RedisBitMap, self).__init__(bit_size, map_num, key=key)
         self.redis = redis.StrictRedis(host=host, port=port, db=db, password=password)
 
-    def get_bit(self, value):
-        return self.redis.getbit(self.key, value)
+    def get_bit(self, value, map_id=0):
+        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
+            return 0
+        key = self.key + str(map_id)
+        return self.redis.getbit(key, value)
 
-    def set_bit(self, value):
-        self.redis.setbit(self.key, value, 1)
+    def set_bit(self, value, map_id=0):
+        if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
+            return None
+        key = self.key + str(map_id)
+        self.redis.setbit(key, value, 1)
 
 
 class BloomFilter(object):
     """布隆过滤器本体"""
-    def __init__(self, bit_map, hash_func):
+    def __init__(self, bit_map, hash_func, map_num=1):
         """
         :param bit_map: 数据集合
         :param hash_func: 哈希函数组
+        :param map_num: 数据集合个数
         """
         self.bit_map = bit_map
         self.hash_func = hash_func
+        self.map_num = map_num
 
     def is_contain(self, value):
         """检测value是否在集合里"""
         if not value:
             return False
         value = md5(value).hexdigest()
+        map_id = int(value[:2], 16) % self.map_num
         res = True
         for f in self.hash_func:
             loc = f.hash_str(value)
-            res = res & self.bit_map.get_bit(loc)
+            res = res & self.bit_map.get_bit(loc, map_id)
         return res
 
     def insert(self, value):
         """将这个值插入集合"""
         value = md5(value).hexdigest()
+        # print value[:2], int(value[:2], 16), self.map_num
+        map_id = int(value[:2], 16) % self.map_num
+
         for f in self.hash_func:
             loc = f.hash_str(value)
-            self.bit_map.set_bit(loc)
+            self.bit_map.set_bit(loc, map_id)
 
 
 def build_hash_func_list(bit, key=7):
@@ -183,9 +208,10 @@ def cal_space():
 def run():
     bit_size = 8
     test_key = 'https://github.com/WokoLiu'
-    bit_map = RedisBitMap(bit_size)
+    map_num = 2
+    bit_map = RedisBitMap(bit_size, map_num)
     func_list = build_hash_func_list(bit_size)
-    bf = BloomFilter(bit_map, func_list)
+    bf = BloomFilter(bit_map, func_list, map_num)
 
     test_one(bf, test_key)
     test_one(bf, test_key)
