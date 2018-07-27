@@ -47,10 +47,7 @@ class MemoryListBitMap(BitMap):
     def get_bit(self, value):
         if not 0 <= value < self.cap:
             return 0
-        if self.map[value]:
-            return 1
-        else:
-            return 0
+        return 1 if self.map[value] else 0
 
     def set_bit(self, value):
         self.map[value] = 1
@@ -58,7 +55,7 @@ class MemoryListBitMap(BitMap):
 
 class MemoryStringBitMap(BitMap):
     """在内存里，使用string来存储
-    会占据大量内存（但比list少一个数量级）
+    会占据大量内存（大概是list的1/8）
     缺点是set_bit操作非常麻烦
     """
     def __init__(self, bit_size):
@@ -68,15 +65,37 @@ class MemoryStringBitMap(BitMap):
     def get_bit(self, value):
         if not 0 <= value < self.cap:
             return 0
-        if self.map[value] == '1':
-            return 1
-        else:
-            return 0
+        return 1 if self.map[value] == '1' else 0
 
     def set_bit(self, value):
         if not 0 <= value < self.cap:
             return None
         self.map = self.map[:value] + '1' + self.map[value+1:]
+
+
+class MemoryIntBitMap(BitMap):
+    """在内存里，使用int来存储
+    占用空间是string的 1/7.5，是list的 1/60（bit_size越大，越接近这个数字）
+    速度也要快很多，但超大数量下还是会慢
+    还不清楚是位移慢还是与或慢
+    """
+    def __init__(self, bit_size):
+        super(MemoryIntBitMap, self).__init__(bit_size)
+        self.map = 1 << self.cap  # 是self.cap个二进制位的一个数
+
+    def get_bit(self, value):
+        """想到了三种方式，从上到下效率依次降低"""
+        if not 0 <= value < self.cap:
+            return 0
+        return 1 if self.map & (1 << (value-1)) else 0  # 直接判断这一位是不是有值
+        # return (self.map >> (value-1)) & 1  # 先右移，再与最末位与
+        # return (self.map >> (value-1)) % 2  # 先右移，再判奇偶
+
+    def set_bit(self, value):
+        """直接按位或"""
+        if not 0 <= value < self.cap:
+            return None
+        self.map |= (1 << (value-1))
 
 
 class BloomFilter(object):
@@ -126,10 +145,28 @@ def test_one(bf, test_key):
         bf.insert(test_key)
 
 
+def cal_space():
+    """计算空间大小"""
+    import sys
+    size = 1 << 30
+    a = 1 << size
+    b = '0' * size
+    c = [0] * size
+    aa = sys.getsizeof(a)
+    bb = sys.getsizeof(b)
+    cc = sys.getsizeof(c)
+    print aa  # 143165604
+    print bb  # 1073741861
+    print cc  # 8589934664
+    print cc / float(bb)  # 7.99999979138
+    print cc / float(aa)  # 59.9999889918
+    print bb / float(aa)  # 7.49999881955
+
+
 def run():
     bit_size = 8
     test_key = 'https://github.com/WokoLiu'
-    bit_map = MemoryStringBitMap(bit_size)
+    bit_map = MemoryIntBitMap(bit_size)
     func_list = build_hash_func_list(bit_size)
     bf = BloomFilter(bit_map, func_list)
 
