@@ -7,6 +7,8 @@
 密码学hash函数：https://www.cnblogs.com/block2016/p/5623902.html
 几种构造方法：https://www.cnblogs.com/gj-Acit/archive/2013/05/06/3062628.html
 这里实现了几种简单构造方式，实际构造时，还是要根据存储结构和关键字集合情况来写
+
+TODO: BKDRHash，APHash，DJBHash，JSHash，RSHash，SDBMHash，PJWHash，ELFHash
 """
 
 
@@ -137,8 +139,31 @@ class RandHash(Hash):
     pass
 
 
+class BitHash(Hash):
+    """保留其中的n位比特位，可以适用于除留取余法，折叠法，甚至平方取中法
+
+    """
+    def __init__(self, bit, seed):
+        """
+        :param bit: 比特位个数
+        :param seed: 种子，用于减少冲突，不建议小于2
+        """
+        cap = 1 << bit  # 总容量，也等于 2 ** bit，但用位移更快
+        operand = cap - 1
+        super(BitHash, self).__init__(operand=operand, seed=seed)
+
+    def hash_str(self, value):
+        res = 0
+        for i in value:
+            res += self.seed * res + ord(i)
+        return self.operand & res
+
+    def hash_int(self, value):
+        return self.hash_str(str(value))
+
 if __name__ == '__main__':
-    hash_obj = FoldHash(5)
-    print hash_obj.hash_int(84388428)
-    print hash_obj.hash_str('yoyoyoyo')
-    print hash_obj.hash_str('yoyoyoyo')
+    # hash_obj = FoldHash(5)
+    # print hash_obj.hash_int(84388428)
+    # print hash_obj.hash_str('yoyoyoyo')
+    # print hash_obj.hash_str('yoyoyoyo')
+    print BitHash(31, 5).hash_str('yoyoyoyoyoyoyoyifjasidjfijisadjfijsidf')
