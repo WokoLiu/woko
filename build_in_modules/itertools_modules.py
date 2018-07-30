@@ -9,7 +9,7 @@
 廖雪峰 https://www.liaoxuefeng.com/wiki/001374738125095c955c1e6d8bb493182103fac9270762a000/001415616001996f6b32d80b6454caca3d33c965a07611f000
 
 无限迭代器：
-count(start=0, step=1): 一个无限+1的生成器，可以调整start和step
+count(start=0, step=1): 一个无限+1的迭代器，可以调整start和step
 cycle(iterable): 无限次迭代出入的可迭代对象
 repeat(object,times=None): 重复返回传入的object无限次或times次
 
@@ -21,13 +21,13 @@ groupby(iterable, key=None): 将第一个参数里，连续且重复的值返回
 dropwhile(func, iterable): 第一个参数是个真值函数，迭代第二个参数并对每个值进行真值判断，当第一次为False时，将此值以及之前迭代过的值全部丢掉，对剩余内容进行迭代
 talewhile(func, iterable): 与dropwhile对应，当第一次为False时，取这个节点及前面全部节点
 
-ifilter(func_or_None, sequence): 就是普通filter的生成器实现，同样如果func_orNone写None的话，每个判断都认为是True
-ifilterfalse(func_or_None, sequence): 普通filter的生成器实现，并对真值判断函数取反，注意如果func_no_None写None的话，每个判断都认为是False
+ifilter(func_or_None, sequence): 就是普通filter的迭代器实现，同样如果func_orNone写None的话，每个判断都认为是True
+ifilterfalse(func_or_None, sequence): 普通filter的迭代器实现，并对真值判断函数取反，注意如果func_no_None写None的话，每个判断都认为是False
 
-islice: slice的生成器实现，可以对生成器进行切片，切完之后返回的还是生成器
-imap(): map的生成器实现
+islice: slice的迭代器实现，可以对迭代器进行切片，切完之后返回的还是迭代器
+imap(): map的迭代器实现
 starmap(): imap的一种调用方式，imap(func, p,q) 等价于 starmap(func, zip(p, q))
-izip(): 在python2里，是zip()的生成器版本
+izip(): 在python2里，是zip()的迭代器版本
 izip_longest(): 如果传入的几个iterables长度不同，迭代次数为长度最大的
 
 【数学】排列组合里的生成器：
@@ -37,7 +37,7 @@ combinations(iterable, r=None): 组合，从len(iterable)个元素中任取r or 
 combinations_with_replacement: 组合，但允许一组中含有多个相同元素
 
 这是itertools里的唯一一个方法
-tee(): 将一个iterable变成n个iterable，注意如果原始iterable是生成器，那么调用完此方法后，原iterable和新iterable，只有一个能使用，即如果使用了原，那么新的就会全部为空，如果使用了新(即使只使用了一个)，原也会已消耗殆尽
+tee(): 将一个iterable变成n个iterable，注意如果原始iterable是迭代器，那么调用完此方法后，原iterable和新iterable，只有一个能使用，即如果使用了原，那么新的就会全部为空，如果使用了新(即使只使用了一个)，原也会已消耗殆尽
 """
 import itertools
 
