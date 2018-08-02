@@ -21,14 +21,13 @@ groupby(iterable, key=None): 将第一个参数里，连续且重复的值返回
 dropwhile(func, iterable): 第一个参数是个真值函数，迭代第二个参数并对每个值进行真值判断，当第一次为False时，将此值以及之前迭代过的值全部丢掉，对剩余内容进行迭代
 talewhile(func, iterable): 与dropwhile对应，当第一次为False时，取这个节点及前面全部节点
 
-ifilter(func_or_None, sequence): 就是普通filter的迭代器实现，同样如果func_orNone写None的话，每个判断都认为是True
-ifilterfalse(func_or_None, sequence): 普通filter的迭代器实现，并对真值判断函数取反，注意如果func_no_None写None的话，每个判断都认为是False
-
 islice: slice的迭代器实现，可以对迭代器进行切片，切完之后返回的还是迭代器
 imap(): map的迭代器实现
 starmap(): imap的一种调用方式，imap(func, p,q) 等价于 starmap(func, zip(p, q))
 izip(): 在python2里，是zip()的迭代器版本
 izip_longest(): 如果传入的几个iterables长度不同，迭代次数为长度最大的
+ifilter(func_or_None, sequence): 就是普通filter的迭代器实现，同样如果func_orNone写None的话，每个判断都认为是True
+ifilterfalse(func_or_None, sequence): 普通filter的迭代器实现，并对真值判断函数取反，注意如果func_no_None写None的话，每个判断都认为是False
 
 【数学】排列组合里的生成器：
 product(*iterables, repeat=1): 求iterables的笛卡尔积元组，repeat表示之前传入的参数重复几遍
@@ -37,7 +36,7 @@ combinations(iterable, r=None): 组合，从len(iterable)个元素中任取r or 
 combinations_with_replacement: 组合，但允许一组中含有多个相同元素
 
 这是itertools里的唯一一个方法
-tee(): 将一个iterable变成n个iterable，注意如果原始iterable是迭代器，那么调用完此方法后，原iterable和新iterable，只有一个能使用，即如果使用了原，那么新的就会全部为空，如果使用了新(即使只使用了一个)，原也会已消耗殆尽
+tee(): 将一个iterable变成n个iterator，注意如果原始iterable是迭代器，那么调用完此方法后，原iterator和新iterator，只有一个能使用，即如果使用了原，那么新的就会全部为空，如果使用了新(即使只使用了一个)，原也会已消耗殆尽
 """
 import itertools
 
@@ -59,14 +58,9 @@ def chain(iterables):
 
 # itertools.product 效果等价于此方法
 def product(*args, **kwargs):
-    # print 'lala', map(tuple, args)
     pools = map(tuple, args) * kwargs.get('repeat', 1)
-    # print 'wowo', pools
     result = [[]]
     for pool in pools:
-        # for x in result:
-        #     for y in pool:
-        #         print 'x', x, 'y', y, 'x+[y]', x + [y]
         result = [x+[y] for x in result for y in pool]
     for prod in result:
         yield tuple(prod)
@@ -152,3 +146,4 @@ print list(origin)
 tee2 = itertools.tee(tee1[1], 2)  # 这里tee1[1]由于没有使用，可以当做origin给第二个测试来使用
 print list(tee1[1])
 print list(tee2[0])
+print list(tee2[1])  # 按照官网代码，这里应该输出空list，但实际情况是输出了完整序列，可见官网代码并不全对，这里可能需要去读C源码了
