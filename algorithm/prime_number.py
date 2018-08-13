@@ -38,8 +38,7 @@ def is_prime(num):
     # for x in prime_set:
         if num % x == 0:
             return False
-    else:
-        return True
+    return True
 
 
 def the_max_prime_area(n):

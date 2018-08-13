@@ -79,7 +79,7 @@ print list(x)
 print list(y)
 
 print '\ndropwhile'
-drop = itertools.dropwhile(lambda i: i < 5, (1,2,3,7,8,9,4,5,6,0))
+drop = itertools.dropwhile(lambda i: i < 5, (1, 2, 3, 7, 8, 9, 4, 5, 6, 0))
 print list(drop)
 
 print '\ngroupby'
@@ -93,14 +93,14 @@ flt = itertools.ifilter(lambda c: c < 5, (1, 4, 6, 8, 3))
 print list(flt)
 fltf = itertools.ifilterfalse(lambda c: c < 5, (1, 4, 6, 8, 3))
 print list(fltf)
-fltf2 = itertools.ifilterfalse(None, (1,2,3))
+fltf2 = itertools.ifilterfalse(None, (1, 2, 3))
 print list(fltf2)
 
 print '\nimap'
-imap1 = itertools.imap(lambda x,y: x*y, range(4), range(3, 100))
+imap1 = itertools.imap(lambda x, y: x*y, range(4), range(3, 100))
 print list(imap1)
 print 'starmap'
-smap1 = itertools.starmap(lambda x,y: x*y, ((1,2), (3,4), (5,6)))
+smap1 = itertools.starmap(lambda x, y: x*y, ((1, 2), (3, 4), (5, 6)))
 print list(smap1)
 print 'imap 和 starmap 互换'
 test_map = lambda x, y: x * y

@@ -43,7 +43,7 @@ class Hash(object):
         raise NotImplementedError
 
 
-class RotateHash(Hash):
+class RotateHash(Hash):  # pylint: disable=W0223
     """旋转法，需要考虑具体数据形态，再决定怎么转，一般用来协助其他hash方法
     所以这里做成装饰器类，在需要附加的地方直接使用就行
     """
@@ -74,7 +74,7 @@ class DirectHash(Hash):
         return int(res)
 
 
-class AnalysisHash(Hash):
+class AnalysisHash(Hash):  # pylint: disable=W0223
     """数字分析法，要预先知道待hash内容的结构及分布，不适合设计通用的hash算法"""
     pass
 
@@ -134,7 +134,7 @@ class FoldHash(Hash):
         return int(str(res)[-5:])
 
 
-class RandHash(Hash):
+class RandHash(Hash):  # pylint: disable=W0223
     """随机数法，hash(K) = Rand(K)，其中Randy为伪随机数，真不知道有什么用"""
     pass
 

@@ -14,6 +14,7 @@ heappushpop(heap, item): 先push进item，然后pop出最小的heap[0]，与heap
 merge: 是这个代码的生成器版本：sorted(itertools.chain(*iterables))，但要求传入的每个list都是已经从小到大排好序了的
 """
 import heapq
+import itertools
 
 sea = [2, 2, 3, 45, 5623, 23, 1, 2124, -12, 45, 6, -21]
 
@@ -38,7 +39,7 @@ print heapq.nlargest(5, data3, key=lambda x: int(x['pid']))
 print '\n几个函数的用法'
 print '原数据', sea
 heapq.heapify(sea)
-print '排序后',sea
+print '排序后', sea
 heapq.heapreplace(sea, 888)
 print '替换最小值', sea
 last_pop = heapq.heappop(sea)
@@ -48,7 +49,6 @@ heapq.heappushpop(sea, 887)
 print '快速重新push', sea
 
 
-import itertools
 multy_list = ([1, 3, 5, 7], [0, 2, 4, 8], [5, 10, 15, 20], [], [25])
 print list(heapq.merge(*multy_list))
 print sorted(itertools.chain(*multy_list))

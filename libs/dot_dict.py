@@ -24,9 +24,6 @@ class DotDict(dict):
 
 
 class ObjectDict(dict):
-    def __init__(self, *args, **kwargs):
-        super(ObjectDict, self).__init__(*args, **kwargs)
-
     def __getattr__(self, name):
         value = self[name]
         # 下面两行可以保证连续点操作符的使用

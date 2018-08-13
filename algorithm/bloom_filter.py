@@ -15,9 +15,9 @@ TODO：
 2. 考虑BitMap类里默认参数是否需要
 """
 
-import redis
 from hashlib import md5
-from build_hash import BitHash
+import redis
+from algorithm.build_hash import BitHash
 
 
 class BitMap(object):
@@ -56,9 +56,10 @@ class MemoryListBitMap(BitMap):
     """
     def __init__(self, bit_size, map_num=1):
         super(MemoryListBitMap, self).__init__(bit_size, map_num)
-        self.map_list = []
-        for i in range(map_num):
-            self.map_list.append([0] * self.cap)  # 1, 0, True, False，所占空间都是24byte
+        self.map_list = [[0] * self.cap] * map_num
+        # self.map_list = []
+        # for i in range(map_num):
+        #     self.map_list.append([0] * self.cap)  # 1, 0, True, False，所占空间都是24byte
 
     def get_bit(self, value, map_id=0):
         if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
@@ -89,7 +90,7 @@ class MemoryStringBitMap(BitMap):
     def set_bit(self, value, map_id=0):
         if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
             return None
-        self.map_list[map_id] = self.map_list[map_id][:value] + '1' + self.map_list[map_id][value+1:]
+        self.map_list[map_id] = self.map_list[map_id][:value]+'1'+self.map_list[map_id][value+1:]
 
 
 class MemoryIntBitMap(BitMap):
@@ -121,7 +122,7 @@ class RedisBitMap(BitMap):
     """使用redis自带的bitmap
     超级快！
     """
-    def __init__(self, bit_size, map_num=1, host='localhost', port=6379, db=0,
+    def __init__(self, bit_size, map_num=1, host='localhost', port=6379, db=0,  # pylint: disable=R0913
                  password=None, key='bloomfilter'):
         super(RedisBitMap, self).__init__(bit_size, map_num, key=key)
         self.redis = redis.StrictRedis(host=host, port=port, db=db, password=password)
@@ -207,6 +208,7 @@ def cal_space():
 
 
 def run():
+    """入口函数"""
     bit_size = 8
     test_key = 'https://github.com/WokoLiu'
     map_num = 2

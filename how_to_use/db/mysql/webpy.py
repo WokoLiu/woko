@@ -17,7 +17,7 @@ CREATE TABLE `test` (
 import web
 
 
-def create_engine(db, host, port, user, pw, pooling=True):
+def create_engine(db, host, port, user, pw, pooling=True):  # pylint: disable=R0913
     db = web.database(dbn='mysql', db=db, host=host, port=port, user=user,
                       pw=pw, pooling=pooling)
     return db

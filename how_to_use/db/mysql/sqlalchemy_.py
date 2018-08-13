@@ -52,4 +52,3 @@ if ready_to_delete:
 session.commit()
 
 session.close()
-

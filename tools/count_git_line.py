@@ -12,7 +12,6 @@
 import commands
 import os
 import re
-import sys
 import fnmatch
 from collections import defaultdict
 
@@ -31,7 +30,7 @@ def count_one(file_name, pattern):
 
 def tree_file(base_path):
     """遍历某目录下所有文件，并返回绝对路径名"""
-    for file_path, dir_list, file_list in os.walk(base_path):
+    for file_path, _, file_list in os.walk(base_path):
         for file_name in file_list:
             # if os.path.splitext(file_name)[1] == '.py':
             if fnmatch.fnmatch(file_name, '*.py'):
@@ -56,7 +55,7 @@ def count_everyone(file_name):
 
 def run(base_path, user_name):
     """获取某个人的代码行数"""
-    pattern = re.compile('\w*\s\(' + user_name)
+    pattern = re.compile(r'\w*\s\(' + user_name)
     count = all_count = 0
     for file_path in tree_file(base_path):
         one, all_one = count_one(file_path, pattern)

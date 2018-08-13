@@ -4,9 +4,10 @@
 # @File    : wechat_info.py
 
 
-import itchat
 from collections import defaultdict
 import sys
+import itchat
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
