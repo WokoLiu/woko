@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/9/17 13:58
 # @Author  : Woko
-# @File    : genereate_rsa_keys.py
+# @File    : generate_rsa_keys.py
 
 """generate a pear of rsa private/public key
 
