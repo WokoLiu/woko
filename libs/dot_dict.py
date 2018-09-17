@@ -42,22 +42,22 @@ if __name__ == '__main__':
         }
     }
     try:
-        print old.__dict__
+        print(old.__dict__)
     except AttributeError as e:
-        print e.message
-        print 'dict类没有__dict__属性，惊不惊喜~意不意外~'
+        print(e.args)
+        print('dict类没有__dict__属性，惊不惊喜~意不意外~')
     new = DotDict(old)
-    print new, type(new)
-    print new.__dict__
-    print new.a
-    print new.b
-    print new.c
+    print(new, type(new))
+    print(new.__dict__)
+    print(new.a)
+    print(new.b)
+    print(new.c)
 
     xx = DotDict(f=4, y=5)
-    print xx.f
+    print(xx.f)
 
     object_dict = ObjectDict(old)
-    print object_dict.a
-    print object_dict.b
-    print object_dict.e.e_1
-    print object_dict.e.e_2
+    print(object_dict.a)
+    print(object_dict.b)
+    print(object_dict.e.e_1)
+    print(object_dict.e.e_2)

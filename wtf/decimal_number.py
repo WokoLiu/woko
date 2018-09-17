@@ -13,12 +13,12 @@ from decimal import Decimal
 
 a = 4.2
 b = 2.1
-print a+b
+print(a+b)
 assert a+b != 6.3
 assert a+b != Decimal('6.3')
 
 aa = Decimal('4.2')
 bb = Decimal('2.1')
-print aa+bb
+print(aa+bb)
 assert aa+bb != 6.3
 assert aa+bb == Decimal('6.3')

@@ -50,9 +50,9 @@ class RotateHash(Hash):  # pylint: disable=W0223
     def __call__(self, func):
         @functools.wraps(func)
         def wrapper(self, value):
-            if isinstance(value, (int, long)):
+            if isinstance(value, int):
                 value = str(value)
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 rotated_value = value[-1:] + value[:-1]
             else:
                 rotated_value = value
@@ -129,7 +129,7 @@ class FoldHash(Hash):
     def hash_str(self, value):
         value = str(int(value, base=16))
         res = 0
-        for i in xrange(0, len(value), self.n):
+        for i in range(0, len(value), self.n):
             res += int(value[i:i+self.n])
         return int(str(res)[-5:])
 
@@ -166,4 +166,4 @@ if __name__ == '__main__':
     # print hash_obj.hash_int(84388428)
     # print hash_obj.hash_str('yoyoyoyo')
     # print hash_obj.hash_str('yoyoyoyo')
-    print BitHash(31, 5).hash_str('yoyoyoyoyoyoyoyifjasidjfijisadjfijsidf')
+    print(BitHash(31, 5).hash_str('yoyoyoyoyoyoyoyifjasidjfijisadjfijsidf'))

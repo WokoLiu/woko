@@ -9,7 +9,7 @@
 也可只检测某个人的，接收一个传入参数做用户名
 """
 
-import commands
+import subprocess
 import os
 import re
 import fnmatch
@@ -19,7 +19,7 @@ from collections import defaultdict
 def count_one(file_name, pattern):
     """检测某个人的代码行数"""
     count = all_count = 0
-    file_data = commands.getoutput('git blame ' + file_name)
+    file_data = subprocess.getoutput('git blame ' + file_name)
     for line in file_data.split('\n'):
         all_count += 1
         if pattern.match(line) is not None:
@@ -44,7 +44,7 @@ def count_everyone(file_name):
     """计算所有人的代码行数"""
     all_count = 0
     global everyone_lines
-    file_data = commands.getoutput('git blame ' + file_name)
+    file_data = subprocess.getoutput('git blame ' + file_name)
     for line in file_data.split('\n'):
         if line:
             all_count += 1
@@ -61,20 +61,20 @@ def run(base_path, user_name):
         one, all_one = count_one(file_path, pattern)
         count += one
         all_count += all_one
-    print count, all_count, float(count) / all_count * 100
+    print(count, all_count, float(count) / all_count * 100)
 
 
 def run_all(base_path):
     all_count = 0
     for file_path in tree_file(base_path):
         all_count += count_everyone(file_path)
-    print '总代码量：', all_count
+    print('总代码量：', all_count)
     if everyone_lines['Not']:
         not_commit = everyone_lines['Not']
         del everyone_lines['Not']
-        print '未提交：', not_commit
-    for user, count in everyone_lines.iteritems():
-        print user, ': ', count, (float(count)/all_count*100)
+        print('未提交：', not_commit)
+    for user, count in everyone_lines.items():
+        print(user, ': ', count, (float(count)/all_count*100))
 
 if __name__ == '__main__':
     base_path = '.'

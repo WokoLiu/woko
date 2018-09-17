@@ -37,14 +37,14 @@ session.commit()
 
 this_one = session.query(TeNoSt).filter(TeNoSt.id == 1).one()
 
-print type(this_one)
-print this_one, this_one.id, this_one.value
+print(type(this_one))
+print(this_one, this_one.id, this_one.value)
 
 this_one.update({'value': 'laiii'})
 session.commit()
 
 still_this_one = session.query(TeNoSt).filter(TeNoSt.id == 1).one()
-print still_this_one.id, still_this_one.value
+print(still_this_one.id, still_this_one.value)
 
 ready_to_delete = session.query(TeNoSt).filter(TeNoSt.value == 'ahhhhh')
 if ready_to_delete:

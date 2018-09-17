@@ -18,8 +18,8 @@ import itertools
 
 sea = [2, 2, 3, 45, 5623, 23, 1, 2124, -12, 45, 6, -21]
 
-print heapq.nlargest(5, sea)
-print heapq.nsmallest(3, sea)
+print(heapq.nlargest(5, sea))
+print(heapq.nsmallest(3, sea))
 
 data3 = [
     {'pid': '0', 'value': '1'},
@@ -33,22 +33,22 @@ data3 = [
     {'pid': '3', 'value': '9'},
     {'pid': '3', 'value': '10'},
 ]
-print heapq.nlargest(5, data3, key=lambda x: int(x['pid']))
+print(heapq.nlargest(5, data3, key=lambda x: int(x['pid'])))
 
 
-print '\n几个函数的用法'
-print '原数据', sea
+print('\n几个函数的用法')
+print('原数据', sea)
 heapq.heapify(sea)
-print '排序后', sea
+print('排序后', sea)
 heapq.heapreplace(sea, 888)
-print '替换最小值', sea
+print('替换最小值', sea)
 last_pop = heapq.heappop(sea)
-print 'pop', sea
-print last_pop
+print('pop', sea)
+print(last_pop)
 heapq.heappushpop(sea, 887)
-print '快速重新push', sea
+print('快速重新push', sea)
 
 
 multy_list = ([1, 3, 5, 7], [0, 2, 4, 8], [5, 10, 15, 20], [], [25])
-print list(heapq.merge(*multy_list))
-print sorted(itertools.chain(*multy_list))
+print(list(heapq.merge(*multy_list)))
+print(sorted(itertools.chain(*multy_list)))

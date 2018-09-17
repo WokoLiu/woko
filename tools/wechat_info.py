@@ -5,17 +5,13 @@
 
 
 from collections import defaultdict
-import sys
 import itchat
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 
 def login(hotReload=True):
     itchat.auto_login(hotReload=hotReload)  # 实现登录状态保留，使得不用每运行一次就要扫一次二维码,默认是FALSE
     itchat.dump_login_status()
-    print '登陆成功'
+    print('登陆成功')
 
 
 def get_all_user_sex():
@@ -33,9 +29,9 @@ def get_all_user_sex():
         else:
             other += 1
 
-    print "男性好友：%.2f%%, %d人" % ((float(man) / total * 100), man)
-    print "女性好友：%.2f%%, %d人" % ((float(women) / total * 100), women)
-    print "其他：%.2f%%, %d人" % ((float(other) / total * 100), other)
+    print("男性好友：%.2f%%, %d人" % ((float(man) / total * 100), man))
+    print("女性好友：%.2f%%, %d人" % ((float(women) / total * 100), women))
+    print("其他：%.2f%%, %d人" % ((float(other) / total * 100), other))
 
 
 def search_first_chatroom(chatroom_name):
@@ -44,7 +40,7 @@ def search_first_chatroom(chatroom_name):
     if not room:
         return None
     if len(room) > 1:
-        print '找到了%d个符合条件的群，取第一个了哈' % len(room)
+        print('找到了%d个符合条件的群，取第一个了哈' % len(room))
     room = room[0]
     itchat.update_chatroom(userName=room['UserName'], detailedMember=True)
     return itchat.search_chatrooms(userName=room['UserName'])
@@ -54,13 +50,13 @@ def get_chatroom_sex(chatroom_name):
     """计算某个群里的性别比"""
     room = search_first_chatroom(chatroom_name)
     if not room:
-        print '没有找到该群'
+        print('没有找到该群')
         return None
     members = room['MemberList']
     # print members
     man = women = other = 0
     total = len(members)
-    print '群里一共%d人' % total
+    print('群里一共%d人' % total)
     for user in members:
         sex = user['Sex']
         if sex == 1:
@@ -70,17 +66,17 @@ def get_chatroom_sex(chatroom_name):
         else:
             other += 1
 
-    print '群名称：%s，总人数%d' % (room['NickName'], total)
-    print "男性：%d人, %.2f%%" % (man, (float(man) / total * 100))
-    print "女性：%d人, %.2f%%" % (women, (float(women) / total * 100))
-    print "其他：%d人, %.2f%%" % (other, (float(other) / total * 100))
+    print('群名称：%s，总人数%d' % (room['NickName'], total))
+    print("男性：%d人, %.2f%%" % (man, (float(man) / total * 100)))
+    print("女性：%d人, %.2f%%" % (women, (float(women) / total * 100)))
+    print("其他：%d人, %.2f%%" % (other, (float(other) / total * 100)))
 
 
 def get_chatroom_friends(chatroom_name):
     """获得某个群里自己的好友"""
     room = search_first_chatroom(chatroom_name)
     if not room:
-        print '没有找到该群'
+        print('没有找到该群')
         return None
     members = room['MemberList']
     friends = get_friends()
@@ -88,10 +84,10 @@ def get_chatroom_friends(chatroom_name):
     for user in members:
         if user.UserName in friends:
             result.append(user)
-    print '群名称：', room.NickName
-    print '这个群里一共 %d 人是好友' % len(result)
+    print('群名称：', room.NickName)
+    print('这个群里一共 %d 人是好友' % len(result))
     for one in result:
-        print one.RemarkName, one.NickName
+        print(one.RemarkName, one.NickName)
     return result
 
 

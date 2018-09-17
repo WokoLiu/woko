@@ -58,7 +58,7 @@ def chain(iterables):
 
 # itertools.product 效果等价于此方法
 def product(*args, **kwargs):
-    pools = map(tuple, args) * kwargs.get('repeat', 1)
+    pools = list(map(tuple, args)) * kwargs.get('repeat', 1)
     result = [[]]
     for pool in pools:
         result = [x+[y] for x in result for y in pool]
@@ -70,80 +70,80 @@ def test_infinite():
     # for i in itertools.count():
     # for i in itertools.cycle('abc'):
     for i in itertools.repeat('d', 10):
-        print i
+        print(i)
 
-print '\ncompress'
-x = itertools.compress(range(4), (1, 0, 0, 1))
-y = itertools.compress(range(4), (False, True, True, False))
-print list(x)
-print list(y)
+print('\ncompress')
+x = itertools.compress(list(range(4)), (1, 0, 0, 1))
+y = itertools.compress(list(range(4)), (False, True, True, False))
+print(list(x))
+print(list(y))
 
-print '\ndropwhile'
+print('\ndropwhile')
 drop = itertools.dropwhile(lambda i: i < 5, (1, 2, 3, 7, 8, 9, 4, 5, 6, 0))
-print list(drop)
+print(list(drop))
 
-print '\ngroupby'
+print('\ngroupby')
 for k, v in itertools.groupby('XXXYYZZZZYY'):
-    print k, list(v)
+    print(k, list(v))
 for k, v in itertools.groupby('AaaBbBccDDDeE', lambda c: c.upper()):
-    print k, list(v)
+    print(k, list(v))
 
-print '\nifilter'
-flt = itertools.ifilter(lambda c: c < 5, (1, 4, 6, 8, 3))
-print list(flt)
-fltf = itertools.ifilterfalse(lambda c: c < 5, (1, 4, 6, 8, 3))
-print list(fltf)
-fltf2 = itertools.ifilterfalse(None, (1, 2, 3))
-print list(fltf2)
+print('\nifilter')
+flt = filter(lambda c: c < 5, (1, 4, 6, 8, 3))
+print(list(flt))
+fltf = itertools.filterfalse(lambda c: c < 5, (1, 4, 6, 8, 3))
+print(list(fltf))
+fltf2 = itertools.filterfalse(None, (1, 2, 3))
+print(list(fltf2))
 
-print '\nimap'
-imap1 = itertools.imap(lambda x, y: x*y, range(4), range(3, 100))
-print list(imap1)
-print 'starmap'
+print('\nimap')
+imap1 = map(lambda x, y: x*y, list(range(4)), list(range(3, 100)))
+print(list(imap1))
+print('starmap')
 smap1 = itertools.starmap(lambda x, y: x*y, ((1, 2), (3, 4), (5, 6)))
-print list(smap1)
-print 'imap 和 starmap 互换'
+print(list(smap1))
+print('imap 和 starmap 互换')
 test_map = lambda x, y: x * y
-map_data = (range(4), range(3, 100))
+map_data = (list(range(4)), list(range(3, 100)))
 
-ismap1 = itertools.imap(test_map, *map_data)
-print list(ismap1)
-ismap2 = itertools.starmap(test_map, zip(*map_data))
-print list(ismap2)
-ismap3 = itertools.starmap(test_map, zip(range(4), range(3, 100)))
-print list(ismap3)
+ismap1 = map(test_map, *map_data)
+print(list(ismap1))
+ismap2 = itertools.starmap(test_map, list(zip(*map_data)))
+print(list(ismap2))
+ismap3 = itertools.starmap(test_map, list(zip(list(range(4)), list(range(3, 100)))))
+print(list(ismap3))
 
-print '\nchain'
+print('\nchain')
 z = 'ABCDEF'
 a = itertools.chain(z)
 b = itertools.chain.from_iterable(z)
 c = chain(z)
-print a.next(), b.next(), c.next()
+print(next(a), next(b), next(c))
 
-print '\nproduct'
+print('\nproduct')
 prod1 = itertools.product('abc', 'def', repeat=2)
-print list(prod1)
+print(list(prod1))
 prod2 = product('abc', 'def', repeat=2)
-print list(prod2)
-prod3 = itertools.product(range(2), repeat=3)
-print list(prod3)
+print(list(prod2))
+prod3 = itertools.product(list(range(2)), repeat=3)
+print(list(prod3))
 
-print '\npermutations'
+print('\npermutations')
 pm1 = itertools.permutations('abcdef', 2)
-print list(pm1)
+print(list(pm1))
 
-print '\ncombinations'
+print('\ncombinations')
 cb1 = itertools.combinations('abc', 2)
-print list(cb1)
+print(list(cb1))
 cb2 = itertools.combinations_with_replacement('abc', 2)
-print list(cb2)
+print(list(cb2))
 
-print '\ntee'
-origin = itertools.ifilter(None, 'asdfghjkl')
+print('\ntee')
+origin = filter(None, 'asdfghjkl')
 tee1 = itertools.tee(origin, 2)
-print list(tee1[0])
-print list(origin)
+print(list(tee1[0]))
+print(list(origin))
 tee2 = itertools.tee(tee1[1], 2)  # 这里tee1[1]由于没有使用，可以当做origin给第二个测试来使用
-print list(tee1[1])
-print list(tee2[0])
-print list(tee2[1])  # 按照官网代码，这里应该输出空list，但实际情况是输出了完整序列，可见官网代码并不全对，这里可能需要去读C源码了
+print(list(tee1[1]))
+print(list(tee2[0]))
+print(list(tee2[1]))  # 按照官网代码，这里应该输出空list，但实际情况是输出了完整序列，可见官网代码并不全对，这里可能需要去读C源码了

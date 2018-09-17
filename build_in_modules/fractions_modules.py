@@ -13,24 +13,24 @@
 from fractions import Fraction, gcd
 from decimal import Decimal
 
-print '初始化方式：'
-print Fraction('2e-2')
-print Fraction('3/13')
-print Fraction('24.5')
-print Fraction(Decimal('1.3'))
+print('初始化方式：')
+print(Fraction('2e-2'))
+print(Fraction('3/13'))
+print(Fraction('24.5'))
+print(Fraction(Decimal('1.3')))
 
-print '\n分数计算：'
+print('\n分数计算：')
 a = Fraction(3, 10)
 b = Fraction(12, 11)
-print a, b
+print(a, b)
 c = a + b
-print c
-print c.numerator, type(c.numerator)
-print c.denominator
-print a - b
-print a * b
-print a / b
-print a ** b
+print(c)
+print(c.numerator, type(c.numerator))
+print(c.denominator)
+print(a - b)
+print(a * b)
+print(a / b)
+print(a ** b)
 
-print '\n最大公约数：'
-print gcd(864, 468)
+# print('\n最大公约数：')
+# print(gcd(864, 468))  # use math.gcd()

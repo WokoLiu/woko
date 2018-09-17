@@ -70,7 +70,7 @@ class MemoryListBitMap(BitMap):
         if not 0 <= value < self.cap or not 0 <= map_id < self.map_num:
             return None
         self.map_list[map_id][value] = 1
-        print self.map_list
+        print(self.map_list)
 
 
 class MemoryStringBitMap(BitMap):
@@ -183,9 +183,9 @@ def build_hash_func_list(bit, key=7):
 def test_one(bf, test_key):
     """测试一个值有没有在集合里"""
     if bf.is_contain(test_key):
-        print 'yes', test_key
+        print('yes', test_key)
     else:
-        print 'no', test_key
+        print('no', test_key)
         bf.insert(test_key)
 
 
@@ -199,12 +199,12 @@ def cal_space():
     aa = sys.getsizeof(a)
     bb = sys.getsizeof(b)
     cc = sys.getsizeof(c)
-    print aa  # 143165604
-    print bb  # 1073741861
-    print cc  # 8589934664
-    print cc / float(bb)  # 7.99999979138
-    print cc / float(aa)  # 59.9999889918
-    print bb / float(aa)  # 7.49999881955
+    print(aa)  # 143165604
+    print(bb)  # 1073741861
+    print(cc)  # 8589934664
+    print(cc / float(bb))  # 7.99999979138
+    print(cc / float(aa))  # 59.9999889918
+    print(bb / float(aa))  # 7.49999881955
 
 
 def run():

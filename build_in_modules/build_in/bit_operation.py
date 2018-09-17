@@ -19,24 +19,24 @@ import timeit
 
 a = 9
 b = 12
-print bin(a)
-print bin(b)
+print(bin(a))
+print(bin(b))
 
-print bin(a & b)
-print bin(a | b)
-print bin(a ^ b)
-print bin(~a), ~a
-print bin(~b), ~b
+print(bin(a & b))
+print(bin(a | b))
+print(bin(a ^ b))
+print(bin(~a), ~a)
+print(bin(~b), ~b)
 
-print bin(a << 2), a << 2
-print bin(b >> 2), b >> 2
+print(bin(a << 2), a << 2)
+print(bin(b >> 2), b >> 2)
 
 x = 2 ** 32
-print bin(x), x, type(x)
+print(bin(x), x, type(x))
 
 y = 1 << 32
-print x - y
+print(x - y)
 
 func = lambda: 2 ** 32
 fund = lambda: 1 << 32
-print timeit.timeit(func, number=1000000) - timeit.timeit(fund, number=1000000)
+print(timeit.timeit(func, number=1000000) - timeit.timeit(fund, number=1000000))

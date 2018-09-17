@@ -48,64 +48,70 @@ tan(x), sin(x), cos(x) 等等，接收的x是弧度
 其他：
 copysign(x, y)：如函数名，把y的符号赋给x，然后返回x。即 lambda x, y: -1*math.fabs(x) if y < 0 else math.fabs(x)
 以及一些我不认识的函数，现在不想看他们
+
+来自fractions的一个函数：
+gcd(x, y)：求最大公约数
 """
 
 import math
 
 pi = math.pi
 
-print '\n三角函数'
-print math.tan(0.25 * pi)
-print math.sin(0.5 * pi)
-print math.cos(2/3 * pi)
-print math.hypot(3, 4)
+print('\n三角函数')
+print(math.tan(0.25 * pi))
+print(math.sin(0.5 * pi))
+print(math.cos(2/3 * pi))
+print(math.hypot(3, 4))
 
-print '\n弧度交互转换'
-print math.radians(180) / pi
-print math.degrees(pi) / 180
+print('\n弧度交互转换')
+print(math.radians(180) / pi)
+print(math.degrees(pi) / 180)
 
-print '\n幂函数'
-print math.pow(2, 3) - 2**3
-print math.sqrt(4)
-print math.pow(8, 1.0/3)
-print 625 ** (1./4)
+print('\n幂函数')
+print(math.pow(2, 3) - 2**3)
+print(math.sqrt(4))
+print(math.pow(8, 1.0/3))
+print(625 ** (1./4))
 
-print '\n对数函数'
-print math.log(math.e)
-print math.log1p(math.e-1)
-print math.log10(10)
+print('\n对数函数')
+print(math.log(math.e))
+print(math.log1p(math.e-1))
+print(math.log10(10))
 log_10 = lambda x: math.log(x, 10)
-print log_10(10)
+print(log_10(10))
 
-print '\n阶乘'
-print math.factorial(5)
+print('\n阶乘')
+print(math.factorial(5))
 
-print '\n内置函数的另一个版本'
-print abs(-1+1j)
-print math.fabs(-1.2)
+print('\n内置函数的另一个版本')
+print(abs(-1+1j))
+print(math.fabs(-1.2))
 
 nums = [1.23e+18, 1, -1.23e+18]
-print sum(nums)
-print math.fsum(nums)
-print math.fmod(10, 3), 10 % 3
+print(sum(nums))
+print(math.fsum(nums))
+print(math.fmod(10, 3), 10 % 3)
 
-print '\n非数字和无穷大'
+print('\n非数字和无穷大')
 nan = float('nan')
 inf = float('inf')
-print nan, inf
-print math.isnan(nan)
-print math.isnan(inf)
-print math.isinf(inf)
-print math.isinf(1e+308)
-print math.isinf(1e+309)
+print(nan, inf)
+print(math.isnan(nan))
+print(math.isnan(inf))
+print(math.isinf(inf))
+print(math.isinf(1e+308))
+print(math.isinf(1e+309))
 
-print '\n取整'
-print math.ceil(8.8)
-print math.floor(8.8)
-print math.trunc(2.4), type(math.trunc(2.4))
-print math.modf(3.4)
+print('\n取整')
+print(math.ceil(8.8))
+print(math.floor(8.8))
+print(math.trunc(2.4), type(math.trunc(2.4)))
+print(math.modf(3.4))
 
-print '\n其他'
-print math.copysign(-3, 1)
+print('\n其他')
+print(math.copysign(-3, 1))
 copysign = lambda x, y: -1*math.fabs(x) if y < 0 else math.fabs(x)
-print copysign(-3, 1)
+print(copysign(-3, 1))
+
+print('\n最大公约数')
+print(math.gcd(100, 2000))

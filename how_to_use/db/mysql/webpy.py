@@ -24,17 +24,17 @@ def create_engine(db, host, port, user, pw, pooling=True):  # pylint: disable=R0
 
 db = create_engine('test', '127.0.0.1', 3306, 'root', '12345678')
 
-print type(db), db.__class__
+print(type(db), db.__class__)
 
-print '\n支持的方法'
+print('\n支持的方法')
 res = db.query('select * from test where id = ' + web.sqlquote(1))
-print res[0] if res else 'query false'
+print(res[0] if res else 'query false')
 
 res = db.select('test', vars={'id': 1}, what='value', where='id = $id', order='id asc')
-print res[0] if res else 'select false'
+print(res[0] if res else 'select false')
 
 res = db.where('test', id=1)
-print res[0] if res else 'where false'
+print(res[0] if res else 'where false')
 
 # res = db.insert('test', value='yoyoyo')
 # print res
@@ -48,7 +48,7 @@ insert_data = [
 # print res
 
 res = db.update('test', where='id=1', value='iiii')
-print res
+print(res)
 
 res = db.delete('test', where='value=' + web.sqlquote('yoyoyo'))
-print res
+print(res)

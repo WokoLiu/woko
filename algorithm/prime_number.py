@@ -33,7 +33,7 @@ def is_prime(num):
 
     # for x in xrange(2, num):
     # for x in xrange(2, num/2+1):
-    for x in xrange(2, int(math.sqrt(num))+1):
+    for x in range(2, int(math.sqrt(num))+1):
     # global prime_set
     # for x in prime_set:
         if num % x == 0:
@@ -102,7 +102,7 @@ def first_n_by_sieve_of_eratosthenes(n):
 
     # 构建全数组
     basic_list = []
-    for x in xrange(max_num+1):  # 从0开始往数组里放，当然第0个元素我们不用管
+    for x in range(max_num+1):  # 从0开始往数组里放，当然第0个元素我们不用管
         if x % 2 == 0:
             basic_list.append(False)
         else:
@@ -119,7 +119,7 @@ def first_n_by_sieve_of_eratosthenes(n):
         base_num += 2  # 跳过偶数，只看奇数
 
     count = 1  # 从1开始是因为默认2已经是质数，加入计数了，这样下面的循环才可以从3开始只取奇数
-    for x in xrange(3, max_num+1, 2):
+    for x in range(3, max_num+1, 2):
         if basic_list[x]:
             count += 1
         if count == n:
@@ -130,5 +130,5 @@ def first_n_by_sieve_of_eratosthenes(n):
 if __name__ == '__main__':
     the_first_n = 1000
     # print is_prime(67)
-    print get_first_n_prime(the_first_n)
+    print(get_first_n_prime(the_first_n))
     # print the_max_prime_area(1000)

@@ -32,43 +32,43 @@ def overlay(pattern):
     :return: f: list
     """
     f = [0]  # 若记下标为i，此list表示模式字符串里子串长度为i时，其前缀后缀的最长匹配长度
-    print pattern
-    for i in xrange(1, len(pattern)):  # 这里是在遍历模式字符串，字符串下标从0开始，所以这个从1开始的遍历是从第二个字符开始判断的
+    print(pattern)
+    for i in range(1, len(pattern)):  # 这里是在遍历模式字符串，字符串下标从0开始，所以这个从1开始的遍历是从第二个字符开始判断的
         j = i  # 标记在模式字符串里用作对比的位置
-        print '\n当前已知：', f, pattern[:len(f)]
-        print '开始分析下一个字符，j=%d' % j, pattern[:j], pattern[j]
-        print '即将对比的是：', j, pattern[i], '和', f[j-1], pattern[f[j-1]]
+        print('\n当前已知：', f, pattern[:len(f)])
+        print('开始分析下一个字符，j=%d' % j, pattern[:j], pattern[j])
+        print('即将对比的是：', j, pattern[i], '和', f[j-1], pattern[f[j-1]])
         while pattern[i] != pattern[f[j-1]] and j > 0:  # 注意这个地方是用pattern[i]来进行对比的，而不是pattern[j]
-            print '这两个不匹配，需要重新确定j'
-            print 'before, j =', j, pattern[:j+1]
-            print 'after, j = f[j-1] = f[%d-1] = %d' % (j, f[j-1]), pattern[:f[j-1]+1]
+            print('这两个不匹配，需要重新确定j')
+            print('before, j =', j, pattern[:j+1])
+            print('after, j = f[j-1] = f[%d-1] = %d' % (j, f[j-1]), pattern[:f[j-1]+1])
             j = f[j-1]  # 这一步很关键，原理见参考文件1
             if j != 0:
-                print '现在即将再次对比：', j, pattern[j], '和', f[j-1], pattern[f[j-1]]
+                print('现在即将再次对比：', j, pattern[j], '和', f[j-1], pattern[f[j-1]])
             else:
-                print '已对比到模式字符串开头，停止继续对比，这里的值是 0'
+                print('已对比到模式字符串开头，停止继续对比，这里的值是 0')
         if j == 0:
             f.append(0)
         else:
-            print '匹配成功，结果是：', f[j-1] + 1
+            print('匹配成功，结果是：', f[j-1] + 1)
             f.append(f[j-1] + 1)
-        print '结果是：', f, '对应模式字符串是', pattern[:len(f)]
+        print('结果是：', f, '对应模式字符串是', pattern[:len(f)])
     return f
 
 
 def kmp(target, pattern):
     next_list = overlay(pattern)
     j = 0
-    for i in xrange(0, len(target)):
-        print '即将匹配的是这俩数：', target[i], pattern[j]
+    for i in range(0, len(target)):
+        print('即将匹配的是这俩数：', target[i], pattern[j])
         if target[i] == pattern[j]:
-            print '当前匹配成功！：%s, %s' % (target[:i+1], pattern[:j+1])
+            print('当前匹配成功！：%s, %s' % (target[:i+1], pattern[:j+1]))
             j += 1
         else:
-            print '匹配失败，重新尝试'
-            print 'before, j=%d' % j
+            print('匹配失败，重新尝试')
+            print('before, j=%d' % j)
             j = next_list[j]
-            print 'after, j=%d' % j
+            print('after, j=%d' % j)
         if j == len(pattern):
             return i-j+1
     return False
@@ -80,4 +80,4 @@ if __name__ == '__main__':
     real_next = [0, 0, 1, 1, 2, 0, 1, 2, 3, 4, 5]
     # print overlay(pattern)
     # print real_next
-    print kmp(target, pattern)
+    print(kmp(target, pattern))
