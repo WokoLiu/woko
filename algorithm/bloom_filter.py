@@ -19,6 +19,9 @@ from hashlib import md5
 import redis
 from algorithm.build_hash import BitHash
 
+__all__ = ['MemoryIntBitMap', 'MemoryListBitMap', 'MemoryStringBitMap', 'RedisBitMap',
+           'BloomFilter', 'build_hash_func_list']
+
 
 class BitMap(object):
     """布隆过滤器使用的存储集合"""
