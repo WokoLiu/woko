@@ -123,9 +123,10 @@ class RedisBitMap(BitMap):
     超级快！
     """
     def __init__(self, bit_size, map_num=1, host='localhost', port=6379, db=0,  # pylint: disable=R0913
-                 password=None, key='bloomfilter'):
+                 password=None, key='bloomfilter', expire=10):
         super(RedisBitMap, self).__init__(bit_size, map_num, key=key)
         self.redis = redis.StrictRedis(host=host, port=port, db=db, password=password)
+        self.expire = expire
 
     def get_bit(self, value, map_id=0):
         """这里不需要对value和map_id做校验，redis会自动处理"""
@@ -135,6 +136,7 @@ class RedisBitMap(BitMap):
     def set_bit(self, value, map_id=0):
         key = self.key + str(map_id)
         self.redis.setbit(key, value, 1)
+        self.redis.expire(key, self.expire)
 
 
 class BloomFilter(object):
@@ -153,7 +155,11 @@ class BloomFilter(object):
         """检测value是否在集合里"""
         if not value:
             return False
-        value = md5(value).hexdigest()
+        try:
+            value = md5(value).hexdigest()
+        except TypeError:
+            value = md5(value.encode('utf-8')).hexdigest()
+
         map_id = int(value[:2], 16) % self.map_num
         res = True
         for f in self.hash_func:
@@ -163,7 +169,10 @@ class BloomFilter(object):
 
     def insert(self, value):
         """将这个值插入集合"""
-        value = md5(value).hexdigest()
+        try:
+            value = md5(value).hexdigest()
+        except TypeError:
+            value = md5(value.encode('utf-8')).hexdigest()
         map_id = int(value[:2], 16) % self.map_num
 
         for f in self.hash_func:
