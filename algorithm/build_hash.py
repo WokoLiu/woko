@@ -20,6 +20,10 @@ def need_md5(func):
     """如果需要对待处理值先md5一下再操作，就加上这个装饰器"""
     @functools.wraps(func)
     def wrapper(self, value):
+        if isinstance(value, int):
+            value = str(value)
+        if isinstance(value, str):
+            value = bytes(value, encoding='utf-8')
         value = md5(value).hexdigest()
         return func(self, value)
     return wrapper
@@ -68,6 +72,8 @@ class DirectHash(Hash):
         return value
 
     def hash_str(self, value):
+        if not value:
+            return 0
         res = ''
         for i in value:
             res += str(ord(i))
@@ -101,8 +107,8 @@ class SqrtMiddleHash(Hash):
         super(SqrtMiddleHash, self).__init__(n=n)
 
     def __middle(self, value):
-        length = len(value) / 2
-        return value[length-self.n/2:length+self.n/2+1]
+        length = len(value) // 2
+        return value[length-self.n//2:length+self.n//2+1]
 
     def hash_int(self, value):
         sqrt = str(value ** 2)
