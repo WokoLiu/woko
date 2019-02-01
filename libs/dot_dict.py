@@ -24,15 +24,30 @@ class DotDict(dict):
 
 
 class ObjectDict(dict):
+    """可以连续使用点操作符"""
     def __getattr__(self, name):
         try:
             value = self[name]
         except KeyError:
-            raise AttributeError
+            raise AttributeError(name)
         # 下面两行可以保证连续点操作符的使用
         if isinstance(value, dict):
             value = ObjectDict(value)
         return value
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+
+class Namespace(dict):
+    """从这里看来的，类如其名：
+    https://github.com/flask-restful/flask-restful/blob/master/flask_restful/reqparse.py#L12
+    """
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
 
     def __setattr__(self, key, value):
         self[key] = value
