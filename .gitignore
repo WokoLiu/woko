@@ -109,3 +109,9 @@ venv.bak/
 # keys
 *.pem
 *.key
+
+# temps
+temp/
+
+# itchat
+*.pkl

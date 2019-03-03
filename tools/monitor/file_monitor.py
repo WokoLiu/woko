@@ -5,19 +5,12 @@
 
 import sys
 
-import requests
-
 if sys.version_info > (3,):
     string = str
 else:
     string = unicode
 
-
-def wechat(text, desp):
-    with open('server.key', 'r') as f:
-        secret = f.read()
-    secret = secret.replace('\n', '')
-    requests.get('https://sc.ftqq.com/' + secret + '.send', params={'text': text, 'desp': desp})
+from tools.server_chan import wechat
 
 
 def run():
