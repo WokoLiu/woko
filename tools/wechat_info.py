@@ -9,7 +9,8 @@ import itchat
 
 
 def login(hotReload=True):
-    itchat.auto_login(hotReload=hotReload)  # 实现登录状态保留，使得不用每运行一次就要扫一次二维码,默认是FALSE
+    # 实现登录状态保留，使得不用每运行一次就要扫一次二维码，itchat里默认是FALSE
+    itchat.auto_login(hotReload=hotReload)
     itchat.dump_login_status()
     print('登陆成功')
 
@@ -29,19 +30,22 @@ def get_all_user_sex():
         else:
             other += 1
 
-    print("男性好友：%.2f%%, %d人" % ((float(man) / total * 100), man))
-    print("女性好友：%.2f%%, %d人" % ((float(women) / total * 100), women))
-    print("其他：%.2f%%, %d人" % ((float(other) / total * 100), other))
+    print('男性好友：%.2f%%, %d人' % ((float(man) / total * 100), man))
+    print('女性好友：%.2f%%, %d人' % ((float(women) / total * 100), women))
+    print('其他：%.2f%%, %d人' % ((float(other) / total * 100), other))
 
 
 def search_first_chatroom(chatroom_name):
     """根据群名称搜索群聊，并返回第一个"""
-    room = itchat.search_chatrooms(chatroom_name)
-    if not room:
+    rooms = itchat.search_chatrooms(chatroom_name)
+    if not rooms:
         return None
-    if len(room) > 1:
-        print('找到了%d个符合条件的群，取第一个了哈' % len(room))
-    room = room[0]
+    for one in rooms:
+        if one['NickName'] == chatroom_name:
+            room = one
+            break
+    else:
+        room = rooms[0]
     itchat.update_chatroom(userName=room['UserName'], detailedMember=True)
     return itchat.search_chatrooms(userName=room['UserName'])
 
@@ -53,10 +57,11 @@ def get_chatroom_sex(chatroom_name):
         print('没有找到该群')
         return None
     members = room['MemberList']
-    # print members
     man = women = other = 0
     total = len(members)
-    print('群里一共%d人' % total)
+    if not total:
+        print('群里没人啊，貌似同步有问题')
+        return None
     for user in members:
         sex = user['Sex']
         if sex == 1:
@@ -67,9 +72,9 @@ def get_chatroom_sex(chatroom_name):
             other += 1
 
     print('群名称：%s，总人数%d' % (room['NickName'], total))
-    print("男性：%d人, %.2f%%" % (man, (float(man) / total * 100)))
-    print("女性：%d人, %.2f%%" % (women, (float(women) / total * 100)))
-    print("其他：%d人, %.2f%%" % (other, (float(other) / total * 100)))
+    print('男性：%d人, %.2f%%' % (man, (float(man) / total * 100)))
+    print('女性：%d人, %.2f%%' % (women, (float(women) / total * 100)))
+    print('其他：%d人, %.2f%%' % (other, (float(other) / total * 100)))
 
 
 def get_chatroom_friends(chatroom_name):
