@@ -4,22 +4,22 @@
 # @File    : aes_encrypt.py
 
 import sys
+
 # 这里是为了兼容Python2，才做的这么麻烦
 if sys.version_info[0] > 2:
-    import crypto
-    sys.modules['Crypto'] = crypto
-
     def make_str(value):
         if isinstance(value, bytes):
             return str(value, encoding='utf-8')
         else:
             return str(value)
 
+
     def make_bytes(value):
         if isinstance(value, str):
             return bytes(value, encoding='utf-8')
         else:
             return bytes(value)
+
 
     hex_encode = lambda x: x.hex()  # input must be bytes
     hex_decode = lambda x: bytes.fromhex(x)  # input must be str
@@ -61,7 +61,8 @@ class AesEncrypt(object):
         return text[0:-ord(text[-1])]
 
     def encrypt(self, text, upper=True):
-        cryptor = AES.new(self.key, self.mode, **self._kwargs)  # 必须每次重新new，不能重复使用
+        # 必须每次重新new，不能重复使用
+        cryptor = AES.new(self.key, self.mode, **self._kwargs)
         text = self.__pad(text)
         res = hex_encode(cryptor.encrypt(make_bytes(text)))
         if upper:
