@@ -111,7 +111,7 @@ venv.bak/
 *.key
 
 # temps
-temp/
+temp*
 
 # itchat
 *.pkl
