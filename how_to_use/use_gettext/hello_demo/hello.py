@@ -4,7 +4,6 @@
 # @File    : hello.py
 
 """
-参考这个文章：https://mp.weixin.qq.com/s/NgY6Ek8TEBcyg8vhnpYdRw
 系统安装 gettext 后就可以直接使用
 
 具体用法：
@@ -30,7 +29,7 @@ zh.install()
 print(zh.gettext('hello world'))
 
 # 日语
-jp = gettext.translation('hello', 'translations', languages=['jp'])
-jp.install()
-_ = jp.gettext
+ja = gettext.translation('hello', 'translations', languages=['ja'])
+ja.install()
+_ = ja.gettext
 print(_('hello world'))
