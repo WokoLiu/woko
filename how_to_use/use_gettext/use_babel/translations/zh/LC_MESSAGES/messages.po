@@ -1,0 +1,36 @@
+# Chinese translations for PROJECT.
+# Copyright (C) 2019 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2019-06-05 16:16+0800\n"
+"PO-Revision-Date: 2019-06-05 16:00+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: demo.py:32
+msgid "hello, index"
+msgstr "你好，目录"
+
+#: demo.py:37
+msgid "wow"
+msgstr "山口山"
+
+#: demo.py:42
+msgid "这是中文哦"
+msgstr "这是中文哦"
+
+#: demo.py:47
+msgid "これは日本語ですよ"
+msgstr "这是日语"
+
