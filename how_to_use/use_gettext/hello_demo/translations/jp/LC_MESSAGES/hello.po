@@ -1,0 +1,21 @@
+# Language jp translations for PACKAGE package.
+# Copyright (C) 2019 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 刘玉龙 <banbooliu@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-06-05 11:54+0800\n"
+"PO-Revision-Date: 2019-06-05 12:17+0800\n"
+"Last-Translator: 刘玉龙 <banbooliu@gmail.com>\n"
+"Language-Team: Language jp\n"
+"Language: jp\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: hello.py:20 hello.py:24 hello.py:28
+msgid "hello world"
+msgstr "ハローワールド"
