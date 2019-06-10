@@ -3,6 +3,14 @@
 # @Author  : Woko
 # @File    : abc_module.py
 
+"""abc: Abstract Base Class 抽象基类
+类似于 Java 的 interface
+可以提供一系列的 abstract method，由具体的子类去实现
+但 register 机制让具体子类可以不必实现所有的 abstract method
+
+另外，Java 的 interface 还有点 mixin 的意思
+"""
+
 import math
 from abc import ABCMeta, abstractmethod
 
