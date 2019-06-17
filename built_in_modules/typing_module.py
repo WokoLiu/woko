@@ -29,12 +29,7 @@ def build_a_house(height: int, name: str) -> str: ...
 def build_a_house(height, name=None):
     if height is None:
         return None
-    elif isinstance(height, int):
-        message = 'building a house with %d height' % height
-    elif isinstance(height, float):
-        message = 'building a house with %f height' % height
-    else:
-        raise TypeError('height must be int or float')
+    message = 'building a house with %d height' % height
     if name:
         message += ' and named with %s' % name
     return message
