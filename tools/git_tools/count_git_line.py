@@ -23,9 +23,11 @@ def get_git_blame(file_name):
     """
     try:
         # use universal_newlines to make sure it returns a str instead of a bytes
-        # pass encoding='utf-8' to subprocess.Popen() and use it in _translate_newlines()
-        file_data = subprocess.check_output(['git', 'blame', file_name], universal_newlines=True,
-                                            stderr=subprocess.STDOUT, encoding='utf-8')
+        # pass encoding='utf-8' to subprocess.Popen()
+        # and use it in _translate_newlines()
+        file_data = subprocess.check_output(
+            ['git', 'blame', file_name], universal_newlines=True,
+            stderr=subprocess.STDOUT, encoding='utf-8')
     except subprocess.CalledProcessError as e:
         if e.args[0] == 128:
             return None
@@ -47,7 +49,6 @@ def count_one(file_name, pattern):
         all_count += 1
         if pattern.match(line) is not None:
             count += 1
-    # print count
     return count, all_count
 
 
@@ -56,7 +57,6 @@ def tree_file(base_path):
     # TODO walk except .gitignore
     for file_path, _, file_list in os.walk(base_path):
         for file_name in file_list:
-            # if os.path.splitext(file_name)[1] == '.py':
             if fnmatch.fnmatch(file_name, '*.py'):
                 yield os.path.join(file_path, file_name)
 
@@ -103,10 +103,10 @@ def run_all(base_path):
     if everyone_lines['Not']:
         not_commit = everyone_lines['Not']
         del everyone_lines['Not']
-        print('未提交:', not_commit)
+        print('未提交:', not_commit, '\n')
     for user, count in everyone_lines.items():
-        print(user, ':', count, (float(count)/all_count*100))
-        print('未提交文件:', uncommit_files)
+        print('{}: {}, {:.2%}'.format(user, count, float(count)/all_count))
+    print('未提交文件:', uncommit_files)
 
 
 if __name__ == '__main__':
