@@ -115,7 +115,7 @@ def first_n_by_sieve_of_eratosthenes(n):
             product_num = base_num * base_num  # 因为 base_num**2 之前的合数都已经被比base_num小的质数标记掉了
             while product_num <= max_num:  # 标记 < max_num 的全部符合条件的数
                 basic_list[product_num] = False
-                product_num += base_num + base_num  # 加两次是因为，2的倍数已经都干掉了，加一次一定是奇数，不需要判断直接跳就行
+                product_num += base_num + base_num  # 加两次是因为，2的倍数已经都干掉了，加一次一定是偶数，不需要判断直接跳就行
         base_num += 2  # 跳过偶数，只看奇数
 
     count = 1  # 从1开始是因为默认2已经是质数，加入计数了，这样下面的循环才可以从3开始只取奇数
