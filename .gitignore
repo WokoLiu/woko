@@ -115,3 +115,6 @@ temp*
 
 # itchat
 *.pkl
+
+# mac
+.DS_Store
