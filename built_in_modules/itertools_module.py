@@ -31,8 +31,10 @@ ifilterfalse(func_or_None, sequence): 普通filter的迭代器实现，并对真
 
 【数学】排列组合里的生成器：
 product(*iterables, repeat=1): 求iterables的笛卡尔积元组，repeat表示之前传入的参数重复几遍
-permutations(iterable, r=None): 排列，从len(iterable)个元素中任取r or len(iterable)个不同元素(r <= len(iterable))的排列，即A(m, n)
-combinations(iterable, r=None): 组合，从len(iterable)个元素中任取r or len(iterable)个不同元素(r <= len(iterable))的组合，即C(m, n)
+permutations(iterable, r=None): 排列，从len(iterable)个元素中任取r or len(iterable)个不同元素(r <= len(iterable))的排列
+    ps: A(m, n) 是 arrangement，意为 numbers of permutation，是一个数字而非一个排列
+combinations(iterable, r=None): 组合，从len(iterable)个元素中任取r or len(iterable)个不同元素(r <= len(iterable))的组合
+    ps: C(m, n) 是 combination numbers，意为组合数，也是一个数字而非一个组合
 combinations_with_replacement: 组合，但允许一组中含有多个相同元素
 
 这是itertools里的唯一一个方法
