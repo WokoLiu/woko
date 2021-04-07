@@ -12,14 +12,15 @@
 
 ps: 只写各种时间与 datetime.datetime 的互相转化
 """
-import sys
 import datetime
+import sys
 import time
 
 PY2 = sys.version_info[0] < 3
 
 
-def basic(sky):
+def basic(sky: datetime.datetime):
+    """基本结构可以拆除哪些信息"""
     print('\nbasic')
     print(sky)  # 完整时间
     print(sky.year)  # 年
@@ -32,7 +33,8 @@ def basic(sky):
     print(sky.time())  # 时间
 
 
-def with_timestamp(sky):
+def with_timestamp(sky: datetime.datetime):
+    """基本结构与时间戳"""
     if PY2:
         sky_timestamps = time.mktime(sky.timetuple())
     else:
@@ -40,11 +42,11 @@ def with_timestamp(sky):
 
     the_sky = datetime.datetime.fromtimestamp(sky_timestamps)
     print('\nwith_timestamp')
-    print(sky_timestamps, the_sky)
+    print(the_sky, sky_timestamps)
 
 
-def with_string(sky):
-    # sky_str = str(sky)
+def with_string(sky: datetime.datetime):
+    """基本结构与字符串"""
     sky_str = sky.strftime('%Y-%m-%d %H:%M:%S')
     if sys.version_info > (3, 7):
         # 只有 iso 标准格式的时候可以这样
@@ -52,10 +54,11 @@ def with_string(sky):
     else:
         the_sky = datetime.datetime.strptime(sky_str, '%Y-%m-%d %H:%M:%S')
     print('\nwith_string')
-    print(sky_str, the_sky)
+    print(the_sky, sky_str)
 
 
 def with_date(sky: datetime.datetime):
+    """基本结构与日期"""
     sky_date = sky.date()
     the_sky1 = datetime.datetime(sky_date.year, sky_date.month, sky_date.day)
     the_sky2 = datetime.datetime.combine(sky_date, datetime.datetime.min.time())
@@ -64,6 +67,7 @@ def with_date(sky: datetime.datetime):
 
 
 def get_now():
+    """获取当前时间"""
     datetime_today = datetime.datetime.today()
     datetime_now = datetime.datetime.now()
     timestamp_now = time.time()
