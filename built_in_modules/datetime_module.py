@@ -42,7 +42,7 @@ def with_timestamp(sky: datetime.datetime):
 
     the_sky = datetime.datetime.fromtimestamp(sky_timestamps)
     print('\nwith_timestamp')
-    print(the_sky, sky_timestamps)
+    print(the_sky, sky_timestamps, int(sky_timestamps * 1000))
 
 
 def with_string(sky: datetime.datetime):
